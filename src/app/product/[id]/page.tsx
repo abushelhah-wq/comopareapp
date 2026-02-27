@@ -30,14 +30,11 @@ function ProductContent() {
   useEffect(() => {
     setLoading(true);
     fetch(
-      `/api/search?q=${encodeURIComponent(productId)}&country=${selectedCountry}`
+      `/api/product?id=${encodeURIComponent(productId)}&country=${selectedCountry}`
     )
       .then((res) => res.json())
       .then((data) => {
-        const found = data.products?.find(
-          (p: Product) => p.id === productId
-        );
-        setProduct(found || null);
+        setProduct(data.product || null);
         setLoading(false);
       })
       .catch(() => setLoading(false));
