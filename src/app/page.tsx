@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import SearchBar from "@/components/SearchBar";
 import CountrySelector from "@/components/CountrySelector";
+import TrendingSection from "@/components/TrendingSection";
 import {
   Globe,
   Sparkles,
@@ -158,6 +159,9 @@ export default function Home() {
           ))}
         </div>
       </section>
+
+      {/* Trending Products */}
+      <TrendingSection country={selectedCountry} />
 
       {/* How it Works */}
       <section className="bg-white border-t border-gray-100 py-16">
