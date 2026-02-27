@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { searchProducts } from "@/lib/products";
 import { getCountryByCode } from "@/lib/countries";
+import { aiSearch } from "@/lib/ai-search";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -19,12 +19,20 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "Invalid country code" }, { status: 400 });
   }
 
-  const products = searchProducts(query, country);
+  try {
+    const products = await aiSearch(query, country);
 
-  return NextResponse.json({
-    query,
-    country: countryData,
-    products,
-    totalResults: products.length,
-  });
+    return NextResponse.json({
+      query,
+      country: countryData,
+      products,
+      totalResults: products.length,
+    });
+  } catch (error) {
+    console.error("AI search error:", error);
+    return NextResponse.json(
+      { error: "Search failed. Please try again." },
+      { status: 500 }
+    );
+  }
 }

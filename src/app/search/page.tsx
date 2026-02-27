@@ -7,7 +7,7 @@ import CountrySelector from "@/components/CountrySelector";
 import ProductCard from "@/components/ProductCard";
 import { Product } from "@/types";
 import { Country } from "@/types";
-import { Search, SlidersHorizontal, PackageX } from "lucide-react";
+import { Search, SlidersHorizontal, PackageX, Sparkles, Loader2 } from "lucide-react";
 
 function SearchContent() {
   const searchParams = useSearchParams();
@@ -18,6 +18,7 @@ function SearchContent() {
   const [products, setProducts] = useState<Product[]>([]);
   const [country, setCountry] = useState<Country | null>(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [selectedCountry, setSelectedCountry] = useState(countryCode);
   const [sortBy, setSortBy] = useState<"price" | "merchants" | "savings">(
     "price"
@@ -26,15 +27,24 @@ function SearchContent() {
   useEffect(() => {
     if (!query) return;
     setLoading(true);
+    setError(null);
 
     fetch(`/api/search?q=${encodeURIComponent(query)}&country=${selectedCountry}`)
       .then((res) => res.json())
       .then((data) => {
-        setProducts(data.products || []);
-        setCountry(data.country || null);
+        if (data.error) {
+          setError(data.error);
+          setProducts([]);
+        } else {
+          setProducts(data.products || []);
+          setCountry(data.country || null);
+        }
         setLoading(false);
       })
-      .catch(() => setLoading(false));
+      .catch(() => {
+        setError("Network error. Please check your connection and try again.");
+        setLoading(false);
+      });
   }, [query, selectedCountry]);
 
   const handleSearch = (newQuery: string) => {
@@ -129,20 +139,36 @@ function SearchContent() {
 
       {/* Loading State */}
       {loading && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[1, 2, 3, 4, 5, 6].map((i) => (
-            <div
-              key={i}
-              className="bg-white rounded-2xl border border-gray-100 overflow-hidden animate-pulse"
-            >
-              <div className="h-48 bg-gray-200" />
-              <div className="p-4 space-y-3">
-                <div className="h-4 bg-gray-200 rounded w-3/4" />
-                <div className="h-6 bg-gray-200 rounded w-1/2" />
-                <div className="h-3 bg-gray-200 rounded w-full" />
+        <div>
+          <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl p-6 border border-indigo-100 mb-8">
+            <div className="flex items-center gap-3">
+              <div className="bg-indigo-100 p-2.5 rounded-xl">
+                <Sparkles className="h-5 w-5 text-indigo-600 animate-pulse" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-indigo-900">AI is searching for prices...</h3>
+                <p className="text-sm text-indigo-500 flex items-center gap-2">
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                  Comparing prices across merchants for &ldquo;{query}&rdquo;
+                </p>
               </div>
             </div>
-          ))}
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[1, 2, 3].map((i) => (
+              <div
+                key={i}
+                className="bg-white rounded-2xl border border-gray-100 overflow-hidden animate-pulse"
+              >
+                <div className="h-48 bg-gray-200" />
+                <div className="p-4 space-y-3">
+                  <div className="h-4 bg-gray-200 rounded w-3/4" />
+                  <div className="h-6 bg-gray-200 rounded w-1/2" />
+                  <div className="h-3 bg-gray-200 rounded w-full" />
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       )}
 
@@ -159,8 +185,26 @@ function SearchContent() {
         </div>
       )}
 
+      {/* Error State */}
+      {!loading && error && (
+        <div className="text-center py-20">
+          <div className="bg-red-50 border border-red-200 rounded-2xl p-8 max-w-md mx-auto">
+            <h3 className="text-lg font-semibold text-red-800 mb-2">
+              Search Error
+            </h3>
+            <p className="text-sm text-red-600 mb-4">{error}</p>
+            <button
+              onClick={() => handleSearch(query)}
+              className="px-6 py-2 bg-red-600 text-white rounded-xl text-sm font-medium hover:bg-red-700 transition-colors"
+            >
+              Try Again
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* No Results */}
-      {!loading && query && products.length === 0 && (
+      {!loading && !error && query && products.length === 0 && (
         <div className="text-center py-20">
           <PackageX className="h-16 w-16 text-gray-300 mx-auto mb-4" />
           <h3 className="text-xl font-semibold text-gray-900 mb-2">
