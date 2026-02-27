@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "setup": "cp -n .env.example .env.local 2>/dev/null; echo '✅ Created .env.local — add your ANTHROPIC_API_KEY'",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
