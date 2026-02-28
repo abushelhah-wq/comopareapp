@@ -1,6 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { Product, AIAnalysis } from "@/types";
-import { getMerchantsByCountry } from "./merchants";
+import { getMerchantsByCountry, buildMerchantSearchUrl } from "./merchants";
 import { getCountryByCode } from "./countries";
 
 const client = new Anthropic({
@@ -13,6 +13,7 @@ interface AIProductResult {
   category: string;
   brand: string;
   description: string;
+  imageUrl?: string;
   merchants: {
     merchantId: string;
     price: number;
@@ -62,6 +63,7 @@ IMPORTANT RULES:
 - Delivery days: 1-7 days, delivery fee: 0 for expensive items, small fee for cheaper ones
 - Product IDs should be kebab-case slugs (e.g., "iphone-16-pro-max-256gb")
 - Be realistic with pricing for the ${country.name} market
+- For imageUrl, provide a REAL working product image URL from the manufacturer's official website, a major CDN, or a well-known public product image source. The image must be directly accessible (not behind authentication). If unsure, use an empty string.
 
 Respond ONLY with a valid JSON array, no other text. Use this exact structure:
 [
@@ -70,6 +72,7 @@ Respond ONLY with a valid JSON array, no other text. Use this exact structure:
     "name": "Full Product Name",
     "category": "Category",
     "brand": "Brand",
+    "imageUrl": "https://example.com/product-image.jpg",
     "description": "Short product description",
     "merchants": [
       {
@@ -104,6 +107,8 @@ Respond ONLY with a valid JSON array, no other text. Use this exact structure:
 
   // Convert AI results to Product format
   return parsed.map((item) => {
+    const productImage = item.imageUrl || "";
+
     const listings = item.merchants
       .map((m) => {
         const merchant = countryMerchants.find((cm) => cm.id === m.merchantId);
@@ -119,12 +124,12 @@ Respond ONLY with a valid JSON array, no other text. Use this exact structure:
           originalPrice: m.originalPrice,
           currency: country.currency,
           currencySymbol: country.currencySymbol,
-          url: `${merchant.baseUrl}/search?q=${encodeURIComponent(item.name)}`,
+          url: buildMerchantSearchUrl(merchant, item.name),
           inStock: m.inStock,
           rating: m.rating,
           deliveryDays: m.deliveryDays,
           deliveryFee: m.deliveryFee,
-          image: `/products/${item.id}.jpg`,
+          image: productImage,
         };
       })
       .filter((l) => l !== null);
@@ -137,7 +142,7 @@ Respond ONLY with a valid JSON array, no other text. Use this exact structure:
       name: item.name,
       category: item.category,
       brand: item.brand,
-      image: `/products/${item.id}.jpg`,
+      image: productImage,
       description: item.description,
       listings,
     };

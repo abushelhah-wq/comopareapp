@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Product } from "@/types";
 import {
   Tag,
@@ -15,6 +16,8 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product, country }: ProductCardProps) {
+  const [imgError, setImgError] = useState(false);
+  const hasImage = product.image && product.image.startsWith("http");
   const inStockListings = product.listings.filter((l) => l.inStock);
   const cheapest = inStockListings[0];
   const mostExpensive = inStockListings[inStockListings.length - 1];
@@ -48,12 +51,21 @@ export default function ProductCard({ product, country }: ProductCardProps) {
     >
       {/* Product Image Area */}
       <div
-        className={`relative h-48 bg-gradient-to-br ${gradient} flex items-center justify-center p-6`}
+        className={`relative h-48 ${hasImage && !imgError ? "bg-white" : `bg-gradient-to-br ${gradient}`} flex items-center justify-center p-6`}
       >
-        <div className="text-white text-center">
-          <ShoppingCart className="h-12 w-12 mx-auto mb-2 opacity-40" />
-          <p className="text-sm font-medium opacity-60">{product.category}</p>
-        </div>
+        {hasImage && !imgError ? (
+          <img
+            src={product.image}
+            alt={product.name}
+            className="max-h-full max-w-full object-contain"
+            onError={() => setImgError(true)}
+          />
+        ) : (
+          <div className="text-white text-center">
+            <ShoppingCart className="h-12 w-12 mx-auto mb-2 opacity-40" />
+            <p className="text-sm font-medium opacity-60">{product.category}</p>
+          </div>
+        )}
 
         {/* Savings Badge */}
         {savingsPercent > 5 && (
@@ -64,7 +76,7 @@ export default function ProductCard({ product, country }: ProductCardProps) {
         )}
 
         {/* Brand Badge */}
-        <div className="absolute top-3 left-3 bg-black/30 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-full">
+        <div className={`absolute top-3 left-3 ${hasImage && !imgError ? "bg-black/60" : "bg-black/30"} backdrop-blur-sm text-white text-xs px-2 py-1 rounded-full`}>
           {product.brand}
         </div>
       </div>
