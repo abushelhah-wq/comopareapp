@@ -1,5 +1,5 @@
 import { Product, ProductListing } from "@/types";
-import { getMerchantsByCountry } from "./merchants";
+import { getMerchantsByCountry, buildMerchantSearchUrl } from "./merchants";
 import { getCountryByCode } from "./countries";
 
 // Exchange rates relative to USD
@@ -347,7 +347,7 @@ export function searchProducts(query: string, countryCode: string): Product[] {
           : undefined,
         currency: country.currency,
         currencySymbol: country.currencySymbol,
-        url: `${merchant.baseUrl}/product/${product.id}`,
+        url: buildMerchantSearchUrl(merchant, product.name),
         inStock,
         rating: merchant.rating + ((price % 10) - 5) / 20,
         deliveryDays,
@@ -407,7 +407,7 @@ export function getProductById(
         : undefined,
       currency: country.currency,
       currencySymbol: country.currencySymbol,
-      url: `${merchant.baseUrl}/product/${base.id}`,
+      url: buildMerchantSearchUrl(merchant, base.name),
       inStock,
       rating: merchant.rating + ((price % 10) - 5) / 20,
       deliveryDays,

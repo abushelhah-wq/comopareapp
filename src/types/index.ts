@@ -12,6 +12,7 @@ export interface Merchant {
   logo: string;
   countries: string[]; // country codes
   baseUrl: string;
+  searchUrl: string; // search URL template with {query} placeholder
   rating: number;
 }
 

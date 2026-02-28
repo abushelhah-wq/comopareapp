@@ -8,6 +8,7 @@ export const merchants: Merchant[] = [
     logo: "/merchants/noon.svg",
     countries: ["SA", "AE", "EG"],
     baseUrl: "https://www.noon.com",
+    searchUrl: "https://www.noon.com/search/?q={query}",
     rating: 4.3,
   },
   {
@@ -16,6 +17,7 @@ export const merchants: Merchant[] = [
     logo: "/merchants/amazon.svg",
     countries: ["SA"],
     baseUrl: "https://www.amazon.sa",
+    searchUrl: "https://www.amazon.sa/s?k={query}",
     rating: 4.5,
   },
   {
@@ -24,6 +26,7 @@ export const merchants: Merchant[] = [
     logo: "/merchants/amazon.svg",
     countries: ["AE"],
     baseUrl: "https://www.amazon.ae",
+    searchUrl: "https://www.amazon.ae/s?k={query}",
     rating: 4.5,
   },
   {
@@ -32,6 +35,7 @@ export const merchants: Merchant[] = [
     logo: "/merchants/jarir.svg",
     countries: ["SA", "AE", "KW", "QA", "BH"],
     baseUrl: "https://www.jarir.com",
+    searchUrl: "https://www.jarir.com/catalogsearch/result/?q={query}",
     rating: 4.2,
   },
   {
@@ -40,6 +44,7 @@ export const merchants: Merchant[] = [
     logo: "/merchants/extra.svg",
     countries: ["SA", "BH", "KW"],
     baseUrl: "https://www.extra.com",
+    searchUrl: "https://www.extra.com/en-sa/search/?q={query}",
     rating: 4.0,
   },
   {
@@ -48,6 +53,7 @@ export const merchants: Merchant[] = [
     logo: "/merchants/lulu.svg",
     countries: ["SA", "AE", "KW", "BH", "QA", "EG"],
     baseUrl: "https://www.luluhypermarket.com",
+    searchUrl: "https://www.luluhypermarket.com/en-sa/search/?q={query}",
     rating: 4.1,
   },
   // UAE specific
@@ -57,6 +63,7 @@ export const merchants: Merchant[] = [
     logo: "/merchants/sharafdg.svg",
     countries: ["AE"],
     baseUrl: "https://www.sharafdg.com",
+    searchUrl: "https://www.sharafdg.com/search/?q={query}",
     rating: 4.2,
   },
   // US merchants
@@ -66,6 +73,7 @@ export const merchants: Merchant[] = [
     logo: "/merchants/amazon.svg",
     countries: ["US"],
     baseUrl: "https://www.amazon.com",
+    searchUrl: "https://www.amazon.com/s?k={query}",
     rating: 4.6,
   },
   {
@@ -74,6 +82,7 @@ export const merchants: Merchant[] = [
     logo: "/merchants/walmart.svg",
     countries: ["US"],
     baseUrl: "https://www.walmart.com",
+    searchUrl: "https://www.walmart.com/search?q={query}",
     rating: 4.3,
   },
   {
@@ -82,6 +91,7 @@ export const merchants: Merchant[] = [
     logo: "/merchants/bestbuy.svg",
     countries: ["US"],
     baseUrl: "https://www.bestbuy.com",
+    searchUrl: "https://www.bestbuy.com/site/searchpage.jsp?st={query}",
     rating: 4.4,
   },
   {
@@ -90,6 +100,7 @@ export const merchants: Merchant[] = [
     logo: "/merchants/target.svg",
     countries: ["US"],
     baseUrl: "https://www.target.com",
+    searchUrl: "https://www.target.com/s?searchTerm={query}",
     rating: 4.2,
   },
   // UK merchants
@@ -99,6 +110,7 @@ export const merchants: Merchant[] = [
     logo: "/merchants/amazon.svg",
     countries: ["GB"],
     baseUrl: "https://www.amazon.co.uk",
+    searchUrl: "https://www.amazon.co.uk/s?k={query}",
     rating: 4.5,
   },
   {
@@ -107,6 +119,7 @@ export const merchants: Merchant[] = [
     logo: "/merchants/argos.svg",
     countries: ["GB"],
     baseUrl: "https://www.argos.co.uk",
+    searchUrl: "https://www.argos.co.uk/search/{query}",
     rating: 4.1,
   },
   {
@@ -115,6 +128,7 @@ export const merchants: Merchant[] = [
     logo: "/merchants/currys.svg",
     countries: ["GB"],
     baseUrl: "https://www.currys.co.uk",
+    searchUrl: "https://www.currys.co.uk/search/{query}",
     rating: 4.0,
   },
   // Egypt
@@ -124,6 +138,7 @@ export const merchants: Merchant[] = [
     logo: "/merchants/jumia.svg",
     countries: ["EG"],
     baseUrl: "https://www.jumia.com.eg",
+    searchUrl: "https://www.jumia.com.eg/catalog/?q={query}",
     rating: 3.9,
   },
 ];
@@ -134,4 +149,8 @@ export function getMerchantsByCountry(countryCode: string): Merchant[] {
 
 export function getMerchantById(id: string): Merchant | undefined {
   return merchants.find((m) => m.id === id);
+}
+
+export function buildMerchantSearchUrl(merchant: Merchant, productName: string): string {
+  return merchant.searchUrl.replace("{query}", encodeURIComponent(productName));
 }

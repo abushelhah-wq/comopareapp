@@ -26,6 +26,7 @@ function ProductContent() {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedCountry, setSelectedCountry] = useState(countryCode);
+  const [imgError, setImgError] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -112,9 +113,18 @@ function ProductContent() {
       {/* Product Header */}
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8 mb-6">
         <div className="flex flex-col sm:flex-row gap-6">
-          {/* Product Image Placeholder */}
-          <div className="flex-shrink-0 w-full sm:w-48 h-48 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-xl flex items-center justify-center">
-            <ShoppingCart className="h-16 w-16 text-indigo-300" />
+          {/* Product Image */}
+          <div className="flex-shrink-0 w-full sm:w-48 h-48 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-xl flex items-center justify-center overflow-hidden">
+            {product.image && product.image.startsWith("http") && !imgError ? (
+              <img
+                src={product.image}
+                alt={product.name}
+                className="max-h-full max-w-full object-contain p-2"
+                onError={() => setImgError(true)}
+              />
+            ) : (
+              <ShoppingCart className="h-16 w-16 text-indigo-300" />
+            )}
           </div>
 
           <div className="flex-1">
