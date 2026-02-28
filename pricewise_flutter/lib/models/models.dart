@@ -27,6 +27,7 @@ class Merchant {
   final String name;
   final List<String> countries;
   final String baseUrl;
+  final String searchUrl; // search URL template with {query} placeholder
   final double rating;
 
   const Merchant({
@@ -34,8 +35,13 @@ class Merchant {
     required this.name,
     required this.countries,
     required this.baseUrl,
+    required this.searchUrl,
     required this.rating,
   });
+
+  String buildSearchUrl(String productName) {
+    return searchUrl.replaceAll('{query}', Uri.encodeComponent(productName));
+  }
 }
 
 class ProductListing {
@@ -92,6 +98,7 @@ class Product {
   final String category;
   final String brand;
   final String description;
+  final String image;
   final List<ProductListing> listings;
 
   const Product({
@@ -100,6 +107,7 @@ class Product {
     required this.category,
     required this.brand,
     required this.description,
+    this.image = '',
     required this.listings,
   });
 
@@ -109,11 +117,14 @@ class Product {
         category: json['category'] ?? '',
         brand: json['brand'] ?? '',
         description: json['description'] ?? '',
+        image: json['image'] ?? '',
         listings: (json['listings'] as List<dynamic>?)
                 ?.map((l) => ProductListing.fromJson(l))
                 .toList() ??
             [],
       );
+
+  bool get hasImage => image.isNotEmpty && image.startsWith('http');
 
   double? get lowestPrice {
     final inStockListings = listings.where((l) => l.inStock).toList();

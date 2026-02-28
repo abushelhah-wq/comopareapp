@@ -12,21 +12,21 @@ const List<Country> countries = [
 ];
 
 const List<Merchant> merchants = [
-  Merchant(id: 'noon', name: 'Noon', countries: ['SA', 'AE', 'EG'], baseUrl: 'https://www.noon.com', rating: 4.3),
-  Merchant(id: 'amazon-sa', name: 'Amazon.sa', countries: ['SA'], baseUrl: 'https://www.amazon.sa', rating: 4.5),
-  Merchant(id: 'amazon-ae', name: 'Amazon.ae', countries: ['AE'], baseUrl: 'https://www.amazon.ae', rating: 4.5),
-  Merchant(id: 'jarir', name: 'Jarir Bookstore', countries: ['SA', 'AE', 'KW', 'QA', 'BH'], baseUrl: 'https://www.jarir.com', rating: 4.2),
-  Merchant(id: 'extra', name: 'Extra', countries: ['SA', 'BH', 'KW'], baseUrl: 'https://www.extra.com', rating: 4.0),
-  Merchant(id: 'lulu', name: 'LuLu Hypermarket', countries: ['SA', 'AE', 'KW', 'BH', 'QA', 'EG'], baseUrl: 'https://www.luluhypermarket.com', rating: 4.1),
-  Merchant(id: 'sharaf-dg', name: 'Sharaf DG', countries: ['AE'], baseUrl: 'https://www.sharafdg.com', rating: 4.2),
-  Merchant(id: 'amazon-us', name: 'Amazon.com', countries: ['US'], baseUrl: 'https://www.amazon.com', rating: 4.6),
-  Merchant(id: 'walmart', name: 'Walmart', countries: ['US'], baseUrl: 'https://www.walmart.com', rating: 4.3),
-  Merchant(id: 'bestbuy', name: 'Best Buy', countries: ['US'], baseUrl: 'https://www.bestbuy.com', rating: 4.4),
-  Merchant(id: 'target', name: 'Target', countries: ['US'], baseUrl: 'https://www.target.com', rating: 4.2),
-  Merchant(id: 'amazon-uk', name: 'Amazon.co.uk', countries: ['GB'], baseUrl: 'https://www.amazon.co.uk', rating: 4.5),
-  Merchant(id: 'argos', name: 'Argos', countries: ['GB'], baseUrl: 'https://www.argos.co.uk', rating: 4.1),
-  Merchant(id: 'currys', name: 'Currys', countries: ['GB'], baseUrl: 'https://www.currys.co.uk', rating: 4.0),
-  Merchant(id: 'jumia', name: 'Jumia', countries: ['EG'], baseUrl: 'https://www.jumia.com.eg', rating: 3.9),
+  Merchant(id: 'noon', name: 'Noon', countries: ['SA', 'AE', 'EG'], baseUrl: 'https://www.noon.com', searchUrl: 'https://www.noon.com/search/?q={query}', rating: 4.3),
+  Merchant(id: 'amazon-sa', name: 'Amazon.sa', countries: ['SA'], baseUrl: 'https://www.amazon.sa', searchUrl: 'https://www.amazon.sa/s?k={query}', rating: 4.5),
+  Merchant(id: 'amazon-ae', name: 'Amazon.ae', countries: ['AE'], baseUrl: 'https://www.amazon.ae', searchUrl: 'https://www.amazon.ae/s?k={query}', rating: 4.5),
+  Merchant(id: 'jarir', name: 'Jarir Bookstore', countries: ['SA', 'AE', 'KW', 'QA', 'BH'], baseUrl: 'https://www.jarir.com', searchUrl: 'https://www.jarir.com/catalogsearch/result/?q={query}', rating: 4.2),
+  Merchant(id: 'extra', name: 'Extra', countries: ['SA', 'BH', 'KW'], baseUrl: 'https://www.extra.com', searchUrl: 'https://www.extra.com/en-sa/search/?q={query}', rating: 4.0),
+  Merchant(id: 'lulu', name: 'LuLu Hypermarket', countries: ['SA', 'AE', 'KW', 'BH', 'QA', 'EG'], baseUrl: 'https://www.luluhypermarket.com', searchUrl: 'https://www.luluhypermarket.com/en-sa/search/?q={query}', rating: 4.1),
+  Merchant(id: 'sharaf-dg', name: 'Sharaf DG', countries: ['AE'], baseUrl: 'https://www.sharafdg.com', searchUrl: 'https://www.sharafdg.com/search/?q={query}', rating: 4.2),
+  Merchant(id: 'amazon-us', name: 'Amazon.com', countries: ['US'], baseUrl: 'https://www.amazon.com', searchUrl: 'https://www.amazon.com/s?k={query}', rating: 4.6),
+  Merchant(id: 'walmart', name: 'Walmart', countries: ['US'], baseUrl: 'https://www.walmart.com', searchUrl: 'https://www.walmart.com/search?q={query}', rating: 4.3),
+  Merchant(id: 'bestbuy', name: 'Best Buy', countries: ['US'], baseUrl: 'https://www.bestbuy.com', searchUrl: 'https://www.bestbuy.com/site/searchpage.jsp?st={query}', rating: 4.4),
+  Merchant(id: 'target', name: 'Target', countries: ['US'], baseUrl: 'https://www.target.com', searchUrl: 'https://www.target.com/s?searchTerm={query}', rating: 4.2),
+  Merchant(id: 'amazon-uk', name: 'Amazon.co.uk', countries: ['GB'], baseUrl: 'https://www.amazon.co.uk', searchUrl: 'https://www.amazon.co.uk/s?k={query}', rating: 4.5),
+  Merchant(id: 'argos', name: 'Argos', countries: ['GB'], baseUrl: 'https://www.argos.co.uk', searchUrl: 'https://www.argos.co.uk/search/{query}', rating: 4.1),
+  Merchant(id: 'currys', name: 'Currys', countries: ['GB'], baseUrl: 'https://www.currys.co.uk', searchUrl: 'https://www.currys.co.uk/search/{query}', rating: 4.0),
+  Merchant(id: 'jumia', name: 'Jumia', countries: ['EG'], baseUrl: 'https://www.jumia.com.eg', searchUrl: 'https://www.jumia.com.eg/catalog/?q={query}', rating: 3.9),
 ];
 
 Country getCountryByCode(String code) {

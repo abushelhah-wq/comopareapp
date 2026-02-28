@@ -55,10 +55,28 @@ class _ProductScreenState extends State<ProductScreen> {
           SliverAppBar(
             expandedHeight: 200,
             pinned: true,
-            backgroundColor: const Color(0xFF4F46E5),
-            foregroundColor: Colors.white,
+            backgroundColor: product.hasImage ? Colors.white : const Color(0xFF4F46E5),
+            foregroundColor: product.hasImage ? const Color(0xFF4F46E5) : Colors.white,
             flexibleSpace: FlexibleSpaceBar(
-              background: Container(
+              background: product.hasImage
+                  ? Container(
+                      color: Colors.white,
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 40, left: 24, right: 24, bottom: 16),
+                          child: Image.network(
+                            product.image,
+                            fit: BoxFit.contain,
+                            errorBuilder: (_, __, ___) => Icon(
+                              Icons.shopping_bag_outlined,
+                              size: 56,
+                              color: const Color(0xFF4F46E5).withValues(alpha: 0.3),
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  : Container(
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
                     colors: [Color(0xFF4F46E5), Color(0xFF7C3AED)],

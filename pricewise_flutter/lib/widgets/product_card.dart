@@ -48,22 +48,40 @@ class ProductCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Top color area
+            // Top image/color area
             Container(
               height: 120,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [color, color.withValues(alpha: 0.7)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-              ),
+              decoration: product.hasImage
+                  ? const BoxDecoration(color: Colors.white)
+                  : BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [color, color.withValues(alpha: 0.7)],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                    ),
               child: Stack(
                 children: [
-                  Center(
-                    child: Icon(Icons.shopping_bag_outlined,
-                        size: 48, color: Colors.white.withValues(alpha: 0.3)),
-                  ),
+                  if (product.hasImage)
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Image.network(
+                          product.image,
+                          fit: BoxFit.contain,
+                          errorBuilder: (_, __, ___) => Icon(
+                            Icons.shopping_bag_outlined,
+                            size: 48,
+                            color: color.withValues(alpha: 0.3),
+                          ),
+                        ),
+                      ),
+                    )
+                  else
+                    Center(
+                      child: Icon(Icons.shopping_bag_outlined,
+                          size: 48, color: Colors.white.withValues(alpha: 0.3)),
+                    ),
                   // Brand badge
                   Positioned(
                     top: 10,
@@ -71,7 +89,9 @@ class ProductCard extends StatelessWidget {
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
-                        color: Colors.black.withValues(alpha: 0.3),
+                        color: product.hasImage
+                            ? Colors.black.withValues(alpha: 0.6)
+                            : Colors.black.withValues(alpha: 0.3),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(

@@ -85,6 +85,7 @@ IMPORTANT RULES:
 - Delivery days: 1-7 days, delivery fee: 0 for expensive items, small fee for cheaper ones
 - Product IDs should be kebab-case slugs (e.g., "iphone-16-pro-max-256gb")
 - Be realistic with pricing for the ${country.name} market
+- For imageUrl, provide a REAL working product image URL from the manufacturer's official website, a major CDN, or a well-known public product image source. The image must be directly accessible (not behind authentication). If unsure, use an empty string.
 
 Respond ONLY with a valid JSON array, no other text. Use this exact structure:
 [
@@ -93,6 +94,7 @@ Respond ONLY with a valid JSON array, no other text. Use this exact structure:
     "name": "Full Product Name",
     "category": "Category",
     "brand": "Brand",
+    "imageUrl": "https://example.com/product-image.jpg",
     "description": "Short product description",
     "merchants": [
       {
@@ -113,6 +115,7 @@ Respond ONLY with a valid JSON array, no other text. Use this exact structure:
 
     return parsed.map<Product>((item) {
       final merchantData = item['merchants'] as List<dynamic>? ?? [];
+      final productImage = item['imageUrl'] as String? ?? '';
 
       final listings = merchantData.map<ProductListing?>((m) {
         final merchant = countryMerchants
@@ -129,7 +132,7 @@ Respond ONLY with a valid JSON array, no other text. Use this exact structure:
           originalPrice: m['originalPrice']?.toDouble(),
           currency: country.currency,
           currencySymbol: country.currencySymbol,
-          url: '${merchant.baseUrl}/search?q=${Uri.encodeComponent(item['name'])}',
+          url: merchant.buildSearchUrl(item['name'] as String),
           inStock: m['inStock'] ?? true,
           rating: (m['rating'] ?? 4.0).toDouble(),
           deliveryDays: m['deliveryDays'] ?? 3,
@@ -145,6 +148,7 @@ Respond ONLY with a valid JSON array, no other text. Use this exact structure:
         category: item['category'] ?? '',
         brand: item['brand'] ?? '',
         description: item['description'] ?? '',
+        image: productImage,
         listings: listings,
       );
     }).toList();
